@@ -23,6 +23,16 @@ datatypes will be up the user of the library.
 1. Lots more tests (currently it only tests basic functionality, complex
    situations are probably missed.)
 
+### Contributing
+
+1. "Fork"
+2. Make a feature branch.
+3. Do your commits
+4. Send "pull request". This can be
+    1. A github pull request
+    2. A issue with a pointer to your publically readable git repo
+    3. An email to me with a pointer to your publically readable git repo
+
 Docs
 ----
 
