@@ -231,3 +231,225 @@ func Test_Long_badopt(t *testing.T) {
     }
 }
 
+func Test_Getopt_one_short_no_arg_no_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "-h",
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if len(args) != 0 {
+        t.Fatal("should be no leftovers")
+    }
+    if optargs[0].Opt() != "-h" && optargs[0].Arg() != "" {
+        t.Fatal("expected to find -h")
+    }
+}
+
+func Test_Getopt_one_short_arg_no_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "-y", "its a yacc!",
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if len(args) != 0 {
+        t.Fatal("should be no leftovers")
+    }
+    if optargs[0].Opt() != "-y" && optargs[0].Arg() != "its a yacc!" {
+        t.Fatal("expected to find -y 'its a yacc!'")
+    }
+}
+
+func Test_Getopt_one_short_arg_one_leftover(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "-y", "its a yacc!", "fizzy",
+    }
+    expected_leftovers := []string {
+      "fizzy",
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "-y" && optargs[0].Arg() != "its a yacc!" {
+        t.Fatal("expected to find -y 'its a yacc!'")
+    }
+}
+
+func Test_Getopt_one_short_arg_several_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "-y", "its a yacc!", "fizzy", "bears", "are", "so", "--tasty",
+    }
+    expected_leftovers := []string {
+      "fizzy", "bears", "are", "so", "--tasty",
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "-y" && optargs[0].Arg() != "its a yacc!" {
+        t.Fatal("expected to find -y 'its a yacc!'")
+    }
+}
+
+
+func Test_Getopt_one_long_no_arg_no_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "--help",
+    }
+    expected_leftovers := []string {
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "--help" && optargs[0].Arg() != "" {
+        t.Fatal("expected to find --help ''")
+    }
+}
+
+func Test_Getopt_one_long_one_narg_no_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "--example", "charles",
+    }
+    expected_leftovers := []string {
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "--help" && optargs[0].Arg() != "charles" {
+        t.Fatal("expected to find --help 'charles'")
+    }
+}
+
+func Test_Getopt_one_long_one_earg_no_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "--example=charles",
+    }
+    expected_leftovers := []string {
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "--help" && optargs[0].Arg() != "charles" {
+        t.Fatal("expected to find --help 'charles'")
+    }
+}
+
+func Test_Getopt_one_long_one_narg_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "--example", "charles",
+      "fizzy", "bears", "are", "so", "--tasty",
+    }
+    expected_leftovers := []string {
+      "fizzy", "bears", "are", "so", "--tasty",
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "--help" && optargs[0].Arg() != "charles" {
+        t.Fatal("expected to find --help 'charles'")
+    }
+}
+
+func Test_Getopt_one_long_one_earg_leftovers(t *testing.T) {
+    short := "hvx:y:z:e" 
+    long := []string{
+      "help", "verbose", "example=", "yacc=", "zebra=", "empty",
+    }
+    input := []string{
+      "--example=charles",
+      "fizzy", "bears", "are", "so", "--tasty",
+    }
+    expected_leftovers := []string {
+      "fizzy", "bears", "are", "so", "--tasty",
+    }
+    args, optargs, err := GetOpt(input, short, long)
+    if err != nil {
+        t.Fatal(err)
+    }
+    if !reflect.DeepEqual(args, expected_leftovers) {
+        t.Log("got", args)
+        t.Log("expected", expected_leftovers)
+        t.Log("optargs", optargs[0], len(optargs))
+        t.Fatal("recieved wrong leftovers")
+    }
+    if optargs[0].Opt() != "--help" && optargs[0].Arg() != "charles" {
+        t.Fatal("expected to find --help 'charles'")
+    }
+}
+
