@@ -80,7 +80,26 @@ func GetOpt(
             continue
         }
 
-        if found, opt, hasarg := short(arg, shorts); found {
+        if len(arg) >= 3 && arg[0] == '-' && arg[1] != '-' {
+            shargs := arg[1:]
+            for i, sharg := range shargs {
+                sa := "-"+string(sharg)
+                if found, opt, hasarg := short(sa, shorts); found {
+                    if i != len(shargs)-1 && hasarg {
+                        msg := fmt.Sprintf("'%v' requires an arg", sa)
+                        return nil, nil, errors.New(msg)
+                    } else if hasarg {
+                        skip = true
+                        emitopt = opt
+                    } else {
+                        optargs = append(optargs, new_optarg(opt, ""))
+                    }
+                } else {
+                    msg := fmt.Sprintf("couldn't find '%v'", sa)
+                    return nil, nil, errors.New(msg)
+                }
+            }
+        } else if found, opt, hasarg := short(arg, shorts); found {
             if hasarg {
                 skip = true
                 emitopt = opt
@@ -99,6 +118,10 @@ func GetOpt(
                 optargs = append(optargs, new_optarg(opt, ""))
             }
         } else {
+            if arg[0] == '-' {
+                msg := fmt.Sprintf("couldn't find '%v'", arg)
+                return nil, nil, errors.New(msg)
+            }
             leftovers = args[i:]
             break
         }
