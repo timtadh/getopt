@@ -19,8 +19,10 @@ flags found, and their options (as strings). Parsing the arguments into Go
 datatypes will be up the user of the library.
 
 
-[1] flag
-[2] https://github.com/droundy/goopt
-[3] https://github.com/jteeuwen/go-pkg-optarg
-[4] https://github.com/kesselborn/go-getopt
+#### Footnotes
+
+- [1] flag
+- [2] https://github.com/droundy/goopt
+- [3] https://github.com/jteeuwen/go-pkg-optarg
+- [4] https://github.com/kesselborn/go-getopt
 
