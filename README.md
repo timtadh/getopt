@@ -3,6 +3,8 @@ Yet Another GetOpt Library For Go
 
 By Tim Henderson (tim.tadh@gmail.com)
 
+BSD Licenced
+
 Motivation
 ----------
 
@@ -30,8 +32,8 @@ datatypes will be up to the user of the library.
 3. Do your commits
 4. Send "pull request". This can be
     1. A github pull request
-    2. A issue with a pointer to your publically readable git repo
-    3. An email to me with a pointer to your publically readable git repo
+    2. A issue with a pointer to your publicly readable git repo
+    3. An email to me with a pointer to your publicly readable git repo
 
 Docs
 ----
