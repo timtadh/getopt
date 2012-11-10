@@ -4,6 +4,10 @@ import "errors"
 import "fmt"
 import "strings"
 
+/*
+The GetOpt function will return a list of OptArgs. If there is no arg then Arg()
+will return "". Opt will contain a leading "-" for short and "--" for long args.
+*/
 type OptArg interface {
     Opt() string
     Arg() string
@@ -18,6 +22,26 @@ func new_optarg(opt, arg string) *optarg { return &optarg{opt, arg} }
 func (self *optarg) Opt() string { return self.opt }
 func (self *optarg) Arg() string { return self.arg }
 
+/*
+GetOpt works like `getopt` in python's `getopt` module in the stdlib (modulus
+implementation bugs).
+
+params
+    args - the argv []string slice
+    shortopts - a string of options (similar to what GNU's getopt excepts).
+                Options which desire an argument should have a colon, ":",
+                subsequent to them. There are no optional arguments at this
+                time.
+
+                ex. "hvx:r" would accept -h -v -x asdf -r
+
+    longopts - a list of strings which describe the long options (eg those with
+               "--" in front). Placing an = on the end indicates a required
+               argument.
+
+               ex. []string{"help", "example="} 
+                 would accept --help --example=tom
+*/
 func GetOpt(
   args []string,
   shortopts string,
