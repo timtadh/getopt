@@ -18,6 +18,10 @@ functionality in a sensible way. This library will simply pull out a list of the
 flags found, and their options (as strings). Parsing the arguments into Go
 datatypes will be up the user of the library.
 
+### Todo
+
+1. Lots more tests (currently it only tests basic functionality, complex
+   situations are probably missed.)
 
 Docs
 ----
