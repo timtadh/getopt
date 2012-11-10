@@ -19,6 +19,55 @@ flags found, and their options (as strings). Parsing the arguments into Go
 datatypes will be up the user of the library.
 
 
+Docs
+----
+
+    PACKAGE
+
+    package getopt
+        import "github.com/timtadh/getopt"
+
+
+    FUNCTIONS
+
+    func GetOpt(
+        args []string,
+        shortopts string,
+        longopts []string,
+    ) (
+        leftovers []string,
+        optargs []OptArg,
+        err error,
+    )
+        GetOpt works like `getopt` in python's `getopt` module in the stdlib
+        (modulus implementation bugs).
+
+        params
+
+      args - the argv []string slice
+      shortopts - a string of options (similar to what GNU's getopt excepts).
+                  Options which desire an argument should have a colon, ":",
+                  subsequent to them. There are no optional arguments at this
+                  time.
+                  ex. "hvx:r" would accept -h -v -x asdf -r
+      longopts - a list of strings which describe the long options (eg those with
+                 "--" in front). Placing an = on the end indicates a required
+                 argument.
+                 ex. []string{"help", "example="}
+                   would accept --help --example=tom
+
+
+    TYPES
+
+    type OptArg interface {
+        Opt() string
+        Arg() string
+    }
+        The GetOpt function will return a list of OptArgs. If there is no arg
+        then Arg() will return "". Opt will contain a leading "-" for short and
+        "--" for long args.
+
+
 #### Footnotes
 
 - [1] flag
