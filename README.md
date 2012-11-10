@@ -16,7 +16,7 @@ flexibility of the simple `getopt`.
 The current solutions also try to do too much while not implementing the basic
 functionality in a sensible way. This library will simply pull out a list of the
 flags found, and their options (as strings). Parsing the arguments into Go
-datatypes will be up the user of the library.
+datatypes will be up to the user of the library.
 
 ### Todo
 
