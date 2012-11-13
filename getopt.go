@@ -80,7 +80,7 @@ func GetOpt(
             continue
         }
 
-        if len(arg) >= 3 && arg[0] == '-' && arg[1] != '-' {
+        if len(arg) >= 2 && arg[0] == '-' && arg[1] != '-' {
             shargs := arg[1:]
             for i, sharg := range shargs {
                 sa := "-"+string(sharg)
@@ -99,14 +99,7 @@ func GetOpt(
                     return nil, nil, errors.New(msg)
                 }
             }
-        } else if found, opt, hasarg := short(arg, shorts); found {
-            if hasarg {
-                skip = true
-                emitopt = opt
-            } else {
-                optargs = append(optargs, new_optarg(opt, ""))
-            }
-        } else if found, opt, oarg, hasarg, err := long(arg, longs); found {
+        }  else if found, opt, oarg, hasarg, err := long(arg, longs); found {
             if err != nil {
                 return nil, nil, err
             } else if oarg != "" {
