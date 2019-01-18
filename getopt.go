@@ -66,13 +66,13 @@ func GetOpt(
 		leftovers = leftovers[1:]
 		if arg == "--" {
 			if skip {
-				msg := "expected an argument got --"
-				return nil, nil, errors.New(msg)
+				err := fmt.Errorf("expected an argument for %q got --", emitopt)
+				return nil, nil, err
 			}
 			break
 		} else if skip {
 			if arg[0] == '-' {
-				msg := fmt.Sprintf("expected an argument got %v", arg)
+				msg := fmt.Sprintf("expected an argument for %q got %v", emitopt, arg)
 				return nil, nil, errors.New(msg)
 			}
 			optargs = append(optargs, new_optarg(emitopt, arg))
@@ -118,6 +118,9 @@ func GetOpt(
 			leftovers = args[i:]
 			break
 		}
+	}
+	if skip {
+		return nil, nil, fmt.Errorf("expected an argument for %q got end of args", emitopt)
 	}
 
 	return leftovers, optargs, nil

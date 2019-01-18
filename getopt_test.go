@@ -571,3 +571,18 @@ func Test_Getopt_three_short_arg_several_leftovers(t *testing.T) {
 		t.Fatal("expected to find -y 'its a yacc!'")
 	}
 }
+
+func Test_Getopt_no_last_arg(t *testing.T) {
+	short := "hx:"
+	long := []string{
+		"help", "example=",
+	}
+	input := []string{
+		"-x",
+	}
+	_, _, err := GetOpt(input, short, long)
+	if err == nil {
+		t.Fatal("expected parse error got nil")
+	}
+	t.Logf("expected err %v", err)
+}
