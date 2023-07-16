@@ -586,3 +586,26 @@ func Test_Getopt_no_last_arg(t *testing.T) {
 	}
 	t.Logf("expected err %v", err)
 }
+
+func Test_Getopt_empty_arg(t *testing.T) {
+	short := ""
+	long := []string{}
+	input := []string{""}
+	expected_leftovers := []string{
+		"",
+	}
+	args, optargs, err := GetOpt(input, short, long)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(args, expected_leftovers) {
+		t.Log("got", args)
+		t.Log("expected", expected_leftovers)
+		t.Log("optargs", optargs[0], len(optargs))
+		t.Fatal("recieved wrong leftovers")
+	}
+	if len(optargs) != 0 {
+		t.Log(optargs)
+		t.Fatal("expected zero optargs")
+	}
+}
